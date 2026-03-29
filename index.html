@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amez ForYou</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:italic,wght@400;700&family=Montserrat:wght@200&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #030000;
+            overflow: hidden;
+            font-family: 'Playfair Display', serif;
+            user-select: none;
+        }
+
+        /* شاشەی سەرەتایی */
+        #start-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #030000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            cursor: pointer;
+        }
+
+        #start-btn {
+            color: #8b0000;
+            font-size: 1.2rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            border: 1px solid #4a0000;
+            padding: 15px 30px;
+            text-shadow: 0 0 10px #ff0000;
+            box-shadow: 0 0 20px #4a0000;
+            transition: 0.5s;
+        }
+
+        /* بارانی تێکست و وێنە */
+        .rain-item {
+            position: absolute;
+            top: -150px;
+            pointer-events: none;
+            animation: fall linear forwards;
+            color: #b30000;
+            text-shadow: 0 0 15px #ff0000, 0 0 30px #8b0000;
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+        }
+
+        .rain-item img {
+            width: 80px;
+            height: auto;
+            border-radius: 4px;
+            box-shadow: 0 0 20px #ff0000;
+            filter: brightness(0.7);
+        }
+
+        @keyframes fall {
+            to { transform: translateY(120vh); }
+        }
+
+        /* دڵە گەورەکە */
+        #heart-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            z-index: 1000;
+            transition: all 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            opacity: 0;
+            text-align: center;
+        }
+
+        .main-heart {
+            font-size: 80px;
+            color: #8b0000;
+            text-shadow: 0 0 50px #ff0000, 0 0 100px #ff0000;
+            animation: pulse 1.8s infinite;
+        }
+
+        .message {
+            margin-top: -10px;
+            color: #fff;
+            font-size: 0.5rem;
+            font-family: "Libre Baskerville", serif;
+            font-optical-sizing: auto;
+            font-weight: <weight>;
+            font-style: normal;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px #ff0000;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        #overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(40,0,0,0.3) 0%, rgba(0,0,0,1) 100%);
+            z-index: 500;
+            opacity: 0;
+            transition: opacity 2s;
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="start-screen" onclick="startExperience()">
+        <div id="start-btn">Open Your Heart Amez</div>
+    </div>
+
+    <div id="overlay"></div>
+    
+    <div id="heart-container">
+        <div class="message">“You’re not just my best friend… you’re my home, my peace, my whole world.”</div>
+    </div>
+
+    <script>
+        const texts = ["HAPPY", "BIRTHDAY", "SOULMATE", "FOREVER", 
+            "MY EVERYTHING", "AMEZ", "ANGEL", "12.04.2026",
+            "QUEEN", "STAY", "MINE", "ALWAYS", "SWEETHEART", "BELOVED", "MY BEST FRIEND", "HAPPINESS"];
+        const images = ["download.jpg", "download (1).jpg", "download (2).jpg", "download (3).jpg", "download (4).jpg"];
+
+        function createRain() {
+            const item = document.createElement('div');
+            item.className = 'rain-item';
+            item.style.opacity = Math.random() > 0.8 ? "0.8" : "0.8";
+
+            if (Math.random() > 0.2) {
+                item.innerText = texts[Math.floor(Math.random() * texts.length)];
+            } else {
+                const img = document.createElement('img');
+                img.src = images[Math.floor(Math.random() * images.length)];
+                item.appendChild(img);
+            }
+
+            item.style.left = Math.random() * 90 + 'vw';
+            const duration = 10 + Math.random() * 5;
+            item.style.animationDuration = duration + 's';
+            
+            document.body.appendChild(item);
+            setTimeout(() => item.remove(), duration * 1000);
+        }
+
+        function startExperience() {
+            // شاردنەوەی شاشەی سەرەتایی
+            document.getElementById('start-screen').style.display = 'none';
+            
+            // لێدانی مۆسیقا
+            const music = document.getElementById('bgMusic');
+            music.play();
+
+            // دەستپێکردنی باران
+            setInterval(createRain, 900);
+
+            // نیشاندانی دڵەکە و تاریککردنی پشتەوە
+            setTimeout(() => {
+                document.getElementById('overlay').style.opacity = '1';
+                const heart = document.getElementById('heart-container');
+                heart.style.opacity = '1';
+                heart.style.transform = 'translate(-50%, -50%) scale(1)';
+            }, 500);
+        }
+    </script>
+</body>
+</html>
